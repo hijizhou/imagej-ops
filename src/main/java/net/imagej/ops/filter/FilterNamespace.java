@@ -51,6 +51,7 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.plugin.Plugin;
 
@@ -1176,6 +1177,28 @@ public class FilterNamespace extends AbstractNamespace {
 		final IterableInterval<T> result = (IterableInterval<T>) ops().run(
 			Ops.Filter.Sigma.class, out, in, shape, outOfBoundsFactory, range,
 			minPixelFraction);
+		return result;
+	}
+
+	/** Executes the "tubeness" filter operation on the given arguments. */
+	@OpMethod(op = net.imagej.ops.filter.tubeness.DefaultTubeness.class)
+	public <T extends RealType<T>> IterableInterval<DoubleType> tubeness(final IterableInterval<DoubleType> out,
+			final RandomAccessibleInterval<T> in, final double sigma, final double... calibration)
+	{
+		@SuppressWarnings("unchecked")
+		final IterableInterval<DoubleType> result = (IterableInterval<DoubleType>) ops().run(Ops.Filter.Tubeness.class,
+				out, in, sigma, calibration);
+		return result;
+	}
+
+	/** Executes the "tubeness" filter operation on the given arguments. */
+	@OpMethod(op = net.imagej.ops.filter.tubeness.DefaultTubeness.class)
+	public <T extends RealType<T>> IterableInterval<DoubleType> tubeness(final RandomAccessibleInterval<T> in,
+			final double sigma, final double... calibration)
+	{
+		@SuppressWarnings("unchecked")
+		final IterableInterval<DoubleType> result = (IterableInterval<DoubleType>) ops().run(Ops.Filter.Tubeness.class,
+				in, sigma, calibration);
 		return result;
 	}
 
