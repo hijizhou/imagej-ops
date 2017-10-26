@@ -27,6 +27,7 @@ namespaces = ```
 		[name: "costes",                      iface: "Costes"],
 		[name: "icq",                         iface: "ICQ"],
 		[name: "kendallTau",		      iface: "KendallTau"],
+		[name: "maxTKendallTau",	      iface: "MaxTKendallTau"],
 		[name: "manders",                     iface: "Manders"],
 		[name: "pearsons",                    iface: "Pearsons"],
 		[name: "pearsonsClassic",             iface: "PearsonsClassic"],
