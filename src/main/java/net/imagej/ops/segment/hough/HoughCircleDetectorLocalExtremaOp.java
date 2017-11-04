@@ -101,8 +101,8 @@ public class HoughCircleDetectorLocalExtremaOp< T extends RealType< T > & Native
 				if ( t.compareTo( c ) > 0 )
 					return null;
 
-				for ( final T t : neighborhood )
-					if ( t.compareTo( c ) > 0 )
+				for ( final T t1 : neighborhood )
+					if ( t1.compareTo( c ) > 0 )
 						return null;
 
 				final double val = c.getRealDouble();
@@ -214,19 +214,19 @@ public class HoughCircleDetectorLocalExtremaOp< T extends RealType< T > & Native
 	{
 		private final double radius;
 
-		private final double sensitivity;
+		private final double sensitivity1;
 
 		public Circle( final Localizable pos, final double radius, final double sensitivity )
 		{
 			super( pos );
 			this.radius = radius;
-			this.sensitivity = sensitivity;
+			this.sensitivity1 = sensitivity;
 		}
 
 		@Override
 		public int compareTo( final Circle o )
 		{
-			return sensitivity < o.sensitivity ? -1 : sensitivity > o.sensitivity ? +1 : 0;
+			return sensitivity1 < o.sensitivity1 ? -1 : sensitivity1 > o.sensitivity1 ? +1 : 0;
 		}
 
 		public boolean contains( final RealLocalizable point )
