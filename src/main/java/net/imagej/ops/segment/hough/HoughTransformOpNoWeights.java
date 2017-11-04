@@ -53,8 +53,10 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 	@Override
 	public Img< DoubleType > createOutput( final IterableInterval< T > input )
 	{
-		maxRadius = Math.max( minRadius, maxRadius );
-		minRadius = Math.min( minRadius, maxRadius );
+		final long maxR = Math.max( minRadius, maxRadius );
+		final long minR = Math.min( minRadius, maxRadius );
+		maxRadius = maxR;
+		minRadius = minR;
 		final long nRadiuses = ( maxRadius - minRadius ) / stepRadius + 1;
 
 		/*
