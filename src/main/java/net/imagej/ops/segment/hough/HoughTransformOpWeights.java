@@ -16,7 +16,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 /**
- * Hough transform for binary images, with weigths for each pixel.
+ * Hough transform for binary images, with weights for each pixel.
  * 
  * @author Jean-Yves Tinevez
  *
@@ -34,10 +34,6 @@ public class HoughTransformOpWeights< T extends BooleanType< T >, R extends Real
 	@Override
 	public void compute( final IterableInterval< T > input, final Img< DoubleType > output )
 	{
-		final int numDimensions = input.numDimensions();
-		if ( input.numDimensions() != 2 ) { throw new IllegalArgumentException(
-				"Cannot compute Hough circle transform for non-2D images. Got " + numDimensions + "D image." ); }
-
 		final long maxR = Math.max( minRadius, maxRadius );
 		final long minR = Math.min( minRadius, maxRadius );
 		maxRadius = maxR;
@@ -65,7 +61,7 @@ public class HoughTransformOpWeights< T extends BooleanType< T >, R extends Real
 
 			for ( int i = 0; i < nRadiuses; i++ )
 			{
-				final IntervalView< DoubleType > slice = Views.hyperSlice( output, numDimensions, i );
+				final IntervalView< DoubleType > slice = Views.hyperSlice( output, input.numDimensions(), i );
 				final long r = minRadius + i * stepRadius;
 				MidPointAlgorithm.add( Views.extendZero( slice ), cursor, r, weight );
 			}

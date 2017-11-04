@@ -6,6 +6,7 @@ import org.scijava.app.StatusService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+import net.imagej.ops.Contingent;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
@@ -29,6 +30,7 @@ import net.imglib2.view.Views;
 @Plugin( type = HoughCircleTransformOp.class, priority = Priority.HIGH )
 public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 		extends AbstractUnaryHybridCF< IterableInterval< T >, Img< DoubleType > >
+		implements Contingent
 {
 
 	@Parameter
@@ -43,15 +45,14 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 	@Parameter( label = "Step radius", description = "Radius step, in pixel units, for the transform.", min = "1", type = ItemIO.INPUT, required = false )
 	protected long stepRadius = 1;
 
+	@Override
+	public boolean conforms() {
+		return in().numDimensions() == 2;
+	}
 
 	@Override
 	public Img< DoubleType > createOutput( final IterableInterval< T > input )
 	{
-		// Get a suitable image factory.
-		final int numDimensions = input.numDimensions();
-		if ( input.numDimensions() != 2 ) { throw new IllegalArgumentException(
-				"Cannot compute Hough circle transform for non-2D images. Got " + numDimensions + "D image." ); }
-
 		maxRadius = Math.max( minRadius, maxRadius );
 		minRadius = Math.min( minRadius, maxRadius );
 		final long nRadiuses = ( maxRadius - minRadius ) / stepRadius + 1;
@@ -60,6 +61,7 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 		 * Voting image.
 		 */
 
+		final int numDimensions = input.numDimensions();
 		final long[] dims = new long[ numDimensions + 1 ];
 		for ( int d = 0; d < numDimensions; d++ )
 			dims[ d ] = input.dimension( d );
@@ -73,10 +75,6 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 	@Override
 	public void compute( final IterableInterval< T > input, final Img< DoubleType > output )
 	{
-		final int numDimensions = input.numDimensions();
-		if ( input.numDimensions() != 2 ) { throw new IllegalArgumentException(
-				"Cannot compute Hough circle transform for non-2D images. Got " + numDimensions + "D image." ); }
-
 		final long maxR = Math.max( minRadius, maxRadius );
 		final long minR = Math.min( minRadius, maxRadius );
 		maxRadius = maxR;
@@ -99,7 +97,7 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 
 			for ( int i = 0; i < nRadiuses; i++ )
 			{
-				final IntervalView< DoubleType > slice = Views.hyperSlice( output, numDimensions, i );
+				final IntervalView< DoubleType > slice = Views.hyperSlice( output, input.numDimensions(), i );
 				final long r = minRadius + i * stepRadius;
 				MidPointAlgorithm.inc( Views.extendZero( slice ), cursor, r );
 			}
