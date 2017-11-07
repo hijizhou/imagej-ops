@@ -4,6 +4,7 @@ import org.scijava.ItemIO;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+import net.imagej.ops.Ops;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
@@ -23,7 +24,7 @@ import net.imglib2.view.Views;
  * @param <T>
  *            the type of source image. Must extend boolean type.
  */
-@Plugin( type = HoughCircleTransformOp.class )
+@Plugin( type = Ops.Segment.HoughCircleTransform.class )
 public class HoughTransformOpWeights< T extends BooleanType< T >, R extends RealType< R > >
 		extends HoughTransformOpNoWeights< T >
 {

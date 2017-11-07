@@ -9,6 +9,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.thread.ThreadService;
 
+import net.imagej.ops.Ops;
 import net.imagej.ops.special.function.AbstractUnaryFunctionOp;
 import net.imglib2.Point;
 import net.imglib2.RandomAccessibleInterval;
@@ -32,7 +33,7 @@ import net.imglib2.view.Views;
  * @param <T>
  *            the type of the source vote image.
  */
-@Plugin( type = HoughCircleDetectorOp.class )
+@Plugin( type = Ops.Segment.HoughCircleDetect.class )
 public class HoughCircleDetectorDogOp< T extends RealType< T > & NativeType< T > >
 		extends AbstractUnaryFunctionOp< RandomAccessibleInterval< T >, List< HoughCircle > >
 {

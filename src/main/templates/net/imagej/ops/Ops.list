@@ -314,7 +314,8 @@ namespaces = ```
 		[name: "topHat",                         iface: "TopHat"],
 	]],
 	[name: "segment", iface: "Segment", ops: [
-		[name: "houghCircle",                    iface: "HoughCircle"],
+		[name: "houghCircleDetect",          iface: "HoughCircleDetect"],
+		[name: "houghCircleTransform",         iface: "HoughCircleTransform"],
 	]],
 	[name: "stats", iface: "Stats", ops: [
 		[name: "geometricMean",                  iface: "GeometricMean"],

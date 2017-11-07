@@ -35,11 +35,19 @@ import java.util.List;
 import net.imagej.ops.AbstractNamespace;
 import net.imagej.ops.Namespace;
 import net.imagej.ops.OpMethod;
+import net.imagej.ops.segment.hough.HoughCircle;
+import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.roi.geom.real.Sphere;
+import net.imglib2.img.Img;
 import net.imglib2.type.BooleanType;
+import net.imglib2.type.NativeType;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.app.StatusService;
 import org.scijava.plugin.Plugin;
+import org.scijava.thread.ThreadService;
 
 /**
  * The segment namespace contains segmentation operations.
@@ -51,13 +59,111 @@ public class SegmentNamespace extends AbstractNamespace {
 
 	// -- Segmentation namespace ops --
 
-	@OpMethod(op = net.imagej.ops.segment.hough.CircleTransform.class)
-	public <B extends BooleanType<B>> List<Sphere> circleTransform(
-		final RandomAccessibleInterval<B> in, final List<Sphere> out)
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughCircleDetectorDogOp.class)
+	public <T extends RealType<T> & NativeType<T>> List<HoughCircle>
+		houghCircleDetectorDog(final RandomAccessibleInterval<T> in,
+			final ThreadService ts, final double circleThickness,
+			final double minRadius, final double stepRadius, final double sigma)
 	{
 		@SuppressWarnings("unchecked")
-		final List<Sphere> result = (List<Sphere>) ops().run(
-			net.imagej.ops.Ops.Segment.HoughCircle.class, in, out);
+		final List<HoughCircle> result = (List<HoughCircle>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleDetect.class, in, ts,
+			circleThickness, minRadius, stepRadius, sigma);
+		return result;
+	}
+
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughCircleDetectorDogOp.class)
+	public <T extends RealType<T> & NativeType<T>> List<HoughCircle>
+		houghCircleDetectorDog(final RandomAccessibleInterval<T> in,
+			final ThreadService ts, final double circleThickness,
+			final double minRadius, final double stepRadius, final double sigma,
+			final double sensitivity)
+	{
+		@SuppressWarnings("unchecked")
+		final List<HoughCircle> result = (List<HoughCircle>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleDetect.class, in, ts,
+			circleThickness, minRadius, stepRadius, sigma, sensitivity);
+		return result;
+	}
+
+	@OpMethod(
+		op = net.imagej.ops.segment.hough.HoughCircleDetectorLocalExtremaOp.class)
+	public <T extends RealType<T> & NativeType<T>> List<HoughCircle>
+		houghCircleDetectorLocalExtrema(final RandomAccessibleInterval<T> in,
+			final ThreadService ts, final double circleThickness,
+			final double minRadius, final double stepRadius)
+	{
+		@SuppressWarnings("unchecked")
+		final List<HoughCircle> result = (List<HoughCircle>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleDetect.class, in, ts,
+			circleThickness, minRadius, stepRadius);
+		return result;
+	}
+
+	@OpMethod(
+		op = net.imagej.ops.segment.hough.HoughCircleDetectorLocalExtremaOp.class)
+	public <T extends RealType<T> & NativeType<T>> Img<DoubleType>
+		houghCircleDetectorLocalExtrema(final RandomAccessibleInterval<T> in,
+			final ThreadService ts, final double circleThickness,
+			final double minRadius, final double stepRadius, final double sensitivity)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<DoubleType> result = (Img<DoubleType>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleDetect.class, in, ts,
+			circleThickness, minRadius, stepRadius, sensitivity);
+		return result;
+	}
+
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughTransformOpNoWeights.class)
+	public <T extends BooleanType<T>> Img<DoubleType> houghCircleTransform(
+		final Img<DoubleType> out, final IterableInterval<T> in,
+		final StatusService statusService, final double minRadius,
+		final double maxRadius, final double stepRadius)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<DoubleType> result = (Img<DoubleType>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleTransform.class, out, in,
+			statusService, minRadius, maxRadius, stepRadius);
+		return result;
+	}
+
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughTransformOpNoWeights.class)
+	public <T extends BooleanType<T>> Img<DoubleType> houghCircleTransform(
+		final IterableInterval<T> in, final StatusService statusService,
+		final double minRadius, final double maxRadius, final double stepRadius)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<DoubleType> result = (Img<DoubleType>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleTransform.class, in, statusService,
+			minRadius, maxRadius, stepRadius);
+		return result;
+	}
+
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughTransformOpWeights.class)
+	public <T extends BooleanType<T>, R extends RealType<R>> Img<DoubleType>
+		houghCircleTransform(final Img<DoubleType> out,
+			final IterableInterval<T> in, final StatusService statusService,
+			final double minRadius, final double maxRadius, final double stepRadius,
+			final RandomAccessible<R> weights)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<DoubleType> result = (Img<DoubleType>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleTransform.class, out, in,
+			statusService, minRadius, maxRadius, stepRadius, weights);
+		return result;
+	}
+
+	@OpMethod(op = net.imagej.ops.segment.hough.HoughTransformOpWeights.class)
+	public <T extends BooleanType<T>, R extends RealType<R>> Img<DoubleType>
+		houghCircleTransform(final IterableInterval<T> in,
+			final StatusService statusService, final double minRadius,
+			final double maxRadius, final double stepRadius,
+			final RandomAccessible<R> weights)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<DoubleType> result = (Img<DoubleType>) ops().run(
+			net.imagej.ops.Ops.Segment.HoughCircleTransform.class, in, statusService,
+			minRadius, maxRadius, stepRadius, weights);
 		return result;
 	}
 

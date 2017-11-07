@@ -7,6 +7,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.Contingent;
+import net.imagej.ops.Ops;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
@@ -27,7 +28,7 @@ import net.imglib2.view.Views;
  * @param <T>
  *            the type of source image. Must extend boolean type.
  */
-@Plugin( type = HoughCircleTransformOp.class, priority = Priority.HIGH )
+@Plugin( type = Ops.Segment.HoughCircleTransform.class, priority = Priority.HIGH )
 public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 		extends AbstractUnaryHybridCF< IterableInterval< T >, Img< DoubleType > >
 		implements Contingent
@@ -36,12 +37,21 @@ public class HoughTransformOpNoWeights< T extends BooleanType< T > >
 	@Parameter
 	protected StatusService statusService;
 
+	/**
+	 * The minimum radius to search for.
+	 */
 	@Parameter( label = "Min circle radius", description = "Minimal radius, in pixel units, for the transform.", min = "1", type = ItemIO.INPUT )
 	protected long minRadius = 1;
 
+	/**
+	 * The maximum radius to search for.
+	 */
 	@Parameter( label = "Max circle radius", description = "Maximal radius, in pixel units, for the transform.", min = "1", type = ItemIO.INPUT )
 	protected long maxRadius = 50;
 
+	/**
+	 * The increment jumped in radius size after every pass.
+	 */
 	@Parameter( label = "Step radius", description = "Radius step, in pixel units, for the transform.", min = "1", type = ItemIO.INPUT, required = false )
 	protected long stepRadius = 1;
 
