@@ -612,6 +612,20 @@ public class FilterNamespace extends AbstractNamespace {
 			forward, fast);
 		return result;
 	}
+	
+	// -- derivativeGauss --
+
+	@OpMethod(op = net.imagej.ops.filter.derivativeGauss.DefaultDerivativeGauss.class)
+	public <T extends RealType<T>> RandomAccessibleInterval<T> derivativeGauss(
+		final RandomAccessibleInterval<T> in, final RandomAccessibleInterval<T> out,
+		final double sigma, final int... derivatives)
+	{
+		@SuppressWarnings("unchecked")
+		final RandomAccessibleInterval<T> result =
+			(RandomAccessibleInterval<T>) ops().run(Ops.Filter.DerivativeGauss.class,
+				out, in, sigma, derivatives);
+		return result;
+	}
 
 	// -- dog --
 
