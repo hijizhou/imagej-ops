@@ -41,6 +41,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.plugin.Parameter;
@@ -54,7 +55,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = Ops.Filter.DerivativeGauss.class)
 public class DefaultDerivativeGauss<T extends RealType<T>> extends
-	AbstractUnaryComputerOp<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
+	AbstractUnaryComputerOp<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>>
 	implements Ops.Filter.DerivativeGauss, Contingent
 {
 
@@ -232,7 +233,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>> extends
 	 * @param mask - The mask needed for the convolution, determined beforehand.
 	 */
 	private <T extends RealType<T>> void convolve_y(
-		RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output,
+		RandomAccessibleInterval<T> input, RandomAccessibleInterval<DoubleType> output,
 		double[] mask)
 	{
 		double sum;
@@ -241,7 +242,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>> extends
 			new OutOfBoundsMirrorFactory<T, RandomAccessibleInterval<T>>(
 				Boundary.SINGLE);
 		RandomAccess<T> inputRA = osmf.create(input);
-		RandomAccess<T> outputRA = output.randomAccess();
+		RandomAccess<DoubleType> outputRA = output.randomAccess();
 
 		while (cursor.hasNext()) {
 			cursor.fwd();
@@ -262,7 +263,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void compute(RandomAccessibleInterval<T> input,
-		RandomAccessibleInterval<T> output)
+		RandomAccessibleInterval<DoubleType> output)
 	{
 		RandomAccessibleInterval<T> intermediate =
 			(RandomAccessibleInterval<T>) ops().run(Ops.Copy.RAI.class, output);

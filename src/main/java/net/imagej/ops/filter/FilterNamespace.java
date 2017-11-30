@@ -52,6 +52,7 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.plugin.Plugin;
 
@@ -616,13 +617,13 @@ public class FilterNamespace extends AbstractNamespace {
 	// -- derivativeGauss --
 
 	@OpMethod(op = net.imagej.ops.filter.derivativeGauss.DefaultDerivativeGauss.class)
-	public <T extends RealType<T>> RandomAccessibleInterval<T> derivativeGauss(
-		final RandomAccessibleInterval<T> in, final RandomAccessibleInterval<T> out,
+	public <T extends RealType<T>> RandomAccessibleInterval<DoubleType> derivativeGauss(
+		final RandomAccessibleInterval<T> in, final RandomAccessibleInterval<DoubleType> out,
 		final double sigma, final int... derivatives)
 	{
 		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<T> result =
-			(RandomAccessibleInterval<T>) ops().run(Ops.Filter.DerivativeGauss.class,
+		final RandomAccessibleInterval<DoubleType> result =
+			(RandomAccessibleInterval<DoubleType>) ops().run(Ops.Filter.DerivativeGauss.class,
 				out, in, sigma, derivatives);
 		return result;
 	}
