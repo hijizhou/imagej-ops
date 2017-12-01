@@ -239,14 +239,18 @@ public abstract class AbstractOpTest {
 		assertFalse("More elements than expected", a.hasNext());
 	}
 
-	public <T extends RealType<T>> boolean areCongruent(final IterableInterval<T> in, final RandomAccessible<T> out, final double epsilon){
+	public <T extends RealType<T>> boolean areCongruent(
+		final IterableInterval<T> in, final RandomAccessible<T> out,
+		final double epsilon)
+	{
 		Cursor<T> cin = in.localizingCursor();
 		RandomAccess<T> raOut = out.randomAccess();
-		
-		while(cin.hasNext()){
+
+		while (cin.hasNext()) {
 			cin.fwd();
 			raOut.setPosition(cin);
-			if(Math.abs(cin.get().getRealDouble() - raOut.get().getRealDouble()) > epsilon) return false;
+			if (Math.abs(cin.get().getRealDouble() - raOut.get()
+				.getRealDouble()) > epsilon) return false;
 		}
 		return true;
 	}
