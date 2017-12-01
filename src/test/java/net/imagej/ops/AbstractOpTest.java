@@ -54,6 +54,7 @@ import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 
@@ -213,6 +214,10 @@ public abstract class AbstractOpTest {
 		return openFloatImg(getClass(), resourcePath);
 	}
 
+	public Img<DoubleType> openDoubleImg(final String resourcePath) {
+		return openDoubleImg(getClass(), resourcePath);
+	}
+
 	public static Img<FloatType> openFloatImg(final Class<?> c,
 		final String resourcePath)
 	{
@@ -225,6 +230,13 @@ public abstract class AbstractOpTest {
 	{
 		final URL url = c.getResource(resourcePath);
 		return IO.openUnsignedByteImgs(url.getPath()).get(0).getImg();
+	}
+
+	public static Img<DoubleType> openDoubleImg(final Class<?> c,
+		final String resourcePath)
+	{
+		final URL url = c.getResource(resourcePath);
+		return IO.openDoubleImgs(url.getPath()).get(0).getImg();
 	}
 
 	public <T> void assertIterationsEqual(final Iterable<T> expected,
